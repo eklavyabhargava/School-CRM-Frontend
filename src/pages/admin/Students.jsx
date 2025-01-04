@@ -20,6 +20,7 @@ const AdminStudentsPage = () => {
     name: "",
     gender: "",
     dob: "",
+    email: "",
     contactDetails: "",
     feesPaid: "",
     class: "",
@@ -107,7 +108,8 @@ const AdminStudentsPage = () => {
         columns={[
           { label: "Name", dataKey: "name", width: 200 },
           { label: "Gender", dataKey: "gender", width: 100 },
-          { label: "DOB", dataKey: "dob", width: 150 },
+          { label: "DOB", dataKey: "dob", width: 130 },
+          { label: "Email", dataKey: "email", width: 250 },
           { label: "Contact", dataKey: "contactDetails", width: 200 },
           { label: "Fees Paid", dataKey: "feesPaid", width: 100 },
           {
@@ -138,6 +140,10 @@ const AdminStudentsPage = () => {
             <Form.Group>
               <Form.ControlLabel>Gender</Form.ControlLabel>
               <Form.Control name="gender" />
+            </Form.Group>
+            <Form.Group>
+              <Form.ControlLabel>Email</Form.ControlLabel>
+              <Form.Control name="email" />
             </Form.Group>
             <Form.Group>
               <Form.ControlLabel>Date of Birth</Form.ControlLabel>
