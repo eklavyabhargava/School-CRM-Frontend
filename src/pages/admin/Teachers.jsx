@@ -70,8 +70,8 @@ const AdminTeachersPage = () => {
     }
   };
 
-  const handleDelete = async (teacherId) => {
-    const response = await deleteTeacher(teacherId);
+  const handleDelete = async (teacher) => {
+    const response = await deleteTeacher(teacher._id);
     if (response.status === 200) {
       setTeachers(teachers.filter((t) => t._id !== teacherId));
     } else {

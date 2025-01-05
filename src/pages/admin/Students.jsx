@@ -83,10 +83,10 @@ const AdminStudentsPage = () => {
     }
   };
 
-  const handleDelete = async (studentId) => {
-    const response = await deleteStudent(studentId);
+  const handleDelete = async (student) => {
+    const response = await deleteStudent(student._id);
     if (response.status === 200) {
-      setStudents(students.filter((t) => t._id !== studentId));
+      setStudents(students.filter((t) => t._id !== student._id));
     } else {
       toast.error("Unable to delete student!");
     }
