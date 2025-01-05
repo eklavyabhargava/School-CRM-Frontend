@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 const StudentLogin = () => {
   const { user } = useSelector((state) => state.user);
-  const [formValue, setFormValue] = useState({ username: "", password: "" });
+  const [formValue, setFormValue] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);

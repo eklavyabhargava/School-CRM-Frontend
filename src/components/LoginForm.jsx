@@ -4,8 +4,8 @@ const LoginForm = ({ formValue, setFormValue, loading, handleLogin }) => {
   return (
     <Form fluid onChange={(value) => setFormValue(value)} formValue={formValue}>
       <Form.Group>
-        <Form.ControlLabel>Username</Form.ControlLabel>
-        <Form.Control name="username" type="text" />
+        <Form.ControlLabel>Email</Form.ControlLabel>
+        <Form.Control name="email" type="text" />
       </Form.Group>
       <Form.Group>
         <Form.ControlLabel>Password</Form.ControlLabel>
