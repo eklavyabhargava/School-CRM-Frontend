@@ -63,7 +63,7 @@ const ClassManagementPage = () => {
         teacher: formValue.teacher._id,
       });
       const data = response.data;
-      if (data.isSuccess) {
+      if (!data.error) {
         setClasses((curr) => {
           const updatedClasses = curr.map((cls) => {
             if (cls._id === currentClassId) {
@@ -78,7 +78,7 @@ const ClassManagementPage = () => {
     } else {
       const response = await createClass(formValue);
       const data = response.data;
-      if (data.isSuccess) {
+      if (!data.error) {
         setClasses([...classes, data]);
       }
     }
