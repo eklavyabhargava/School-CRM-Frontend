@@ -21,7 +21,7 @@ const AdminStudentsPage = () => {
     gender: "",
     dob: "",
     email: "",
-    contactDetails: "",
+    phoneNumber: "",
     feesPaid: "",
     class: "",
   });
@@ -110,7 +110,7 @@ const AdminStudentsPage = () => {
           { label: "Gender", dataKey: "gender", width: 100 },
           { label: "DOB", dataKey: "dob", width: 130 },
           { label: "Email", dataKey: "email", width: 250 },
-          { label: "Contact", dataKey: "contactDetails", width: 200 },
+          { label: "Phone", dataKey: "phoneNumber", width: 200 },
           { label: "Fees Paid", dataKey: "feesPaid", width: 100 },
           {
             label: "Class",
@@ -150,8 +150,8 @@ const AdminStudentsPage = () => {
               <Form.Control name="dob" type="date" />
             </Form.Group>
             <Form.Group>
-              <Form.ControlLabel>Contact</Form.ControlLabel>
-              <Form.Control name="contactDetails" />
+              <Form.ControlLabel>Phone</Form.ControlLabel>
+              <Form.Control name="phoneNumber" />
             </Form.Group>
             <Form.Group>
               <Form.ControlLabel>Class</Form.ControlLabel>

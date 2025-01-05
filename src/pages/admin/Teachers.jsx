@@ -19,7 +19,7 @@ const AdminTeachersPage = () => {
     gender: "",
     dob: "",
     email: "",
-    contactDetails: "",
+    phoneNumber: "",
     salary: "",
   });
   const [currentTeacherId, setCurrentTeacherId] = useState(null);
@@ -97,7 +97,7 @@ const AdminTeachersPage = () => {
           { label: "Gender", dataKey: "gender", width: 100 },
           { label: "DOB", dataKey: "dob", width: 150 },
           { label: "Email", dataKey: "email", width: 250 },
-          { label: "Contact", dataKey: "contactDetails", width: 200 },
+          { label: "Phone", dataKey: "phoneNumber", width: 200 },
           { label: "Salary", dataKey: "salary", width: 150 },
         ]}
         actions={{ edit: handleEdit, delete: handleDelete }}
@@ -131,8 +131,8 @@ const AdminTeachersPage = () => {
               <Form.Control name="dob" type="date" />
             </Form.Group>
             <Form.Group>
-              <Form.ControlLabel>Contact</Form.ControlLabel>
-              <Form.Control name="contactDetails" />
+              <Form.ControlLabel>Phone Number</Form.ControlLabel>
+              <Form.Control name="phoneNumber" />
             </Form.Group>
             <Form.Group>
               <Form.ControlLabel>Salary</Form.ControlLabel>
