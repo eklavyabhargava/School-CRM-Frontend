@@ -73,7 +73,8 @@ const AdminTeachersPage = () => {
   const handleDelete = async (teacher) => {
     const response = await deleteTeacher(teacher._id);
     if (response.status === 200) {
-      setTeachers(teachers.filter((t) => t._id !== teacherId));
+      // update teachers data
+      setTeachers(teachers.filter((t) => t._id !== teacher._id));
     } else {
       toast.error("Unable to delete teacher!");
     }
