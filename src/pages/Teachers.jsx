@@ -69,6 +69,7 @@ const TeacherPage = () => {
   };
 
   const handleDelete = async (teacher) => {
+    console.log(teacher);
     const response = await deleteTeacher(teacher._id);
     if (response.data.isSuccess) {
       setTeachers((curr) => curr.filter((t) => t._id !== teacher._id));
