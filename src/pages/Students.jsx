@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Table, Button, Modal, Form, DatePicker } from "rsuite";
 import {
-  Table,
-  Button,
-  Modal,
-  Form,
-  DatePicker,
-} from "rsuite";
-import api from "../services/api";
+  createStudent,
+  deleteStudent,
+  getStudents,
+  updateStudent,
+} from "../services/adminService";
 
 const StudentPage = () => {
   const [students, setStudents] = useState([]);
@@ -28,7 +27,7 @@ const StudentPage = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await api.get("/classes");
+      const response = await getStudents();
       setStudents(response.data);
     } catch (error) {
       console.error("Error fetching classes", error);
@@ -38,11 +37,24 @@ const StudentPage = () => {
   const handleSubmit = async () => {
     try {
       if (isEditing) {
-        await api.put(`/students/${currentStudentId}`, formValue);
+        const response = await updateStudent(currentStudentId, formValue);
+        if (!response.data.error) {
+          setStudents((prevData) => {
+            const updatedData = prevData.map((data) => {
+              if (data._id === currentStudentId) {
+                data = response.data;
+              }
+              return data;
+            });
+            return updatedData;
+          });
+        }
       } else {
-        await api.post("/student", formValue);
+        const response = await createStudent(formValue);
+        if (!response.data.error) {
+          setStudents((prev) => [...prev, response.data]);
+        }
       }
-      fetchStudents();
       setShowModal(false);
     } catch (error) {
       console.error("Error saving class", error);
@@ -56,10 +68,12 @@ const StudentPage = () => {
     setShowModal(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (student) => {
     try {
-      await api.delete(`/classes/${id}`);
-      fetchStudents();
+      const response = await deleteStudent(student._id);
+      if (response.isSuccess) {
+        setStudents((prev) => prev.filter((data) => data._id !== student._id));
+      }
     } catch (error) {
       console.error("Error deleting class", error);
     }
@@ -67,14 +81,14 @@ const StudentPage = () => {
 
   return (
     <div className="container mx-auto py-10">
-      <h2 className="text-2xl font-bold mb-5">Classes</h2>
+      <h2 className="text-2xl font-bold mb-5">Students</h2>
       <Button
         onClick={() => {
           setShowModal(true);
           setIsEditing(false);
         }}
       >
-        Add Class
+        Add Student
       </Button>
 
       <Table data={students} autoHeight>
@@ -95,8 +109,8 @@ const StudentPage = () => {
           <Table.Cell dataKey="contactDetails" />
         </Table.Column>
         <Table.Column width={100}>
-          <Table.HeaderCell>Classes</Table.HeaderCell>
-          <Table.Cell dataKey="classes" />
+          <Table.HeaderCell>Class</Table.HeaderCell>
+          <Table.Cell dataKey="class" />
         </Table.Column>
         <Table.Column width={200}>
           <Table.HeaderCell>Actions</Table.HeaderCell>

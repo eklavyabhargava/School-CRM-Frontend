@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, DatePicker } from "rsuite";
-import api from "../services/api";
+import {
+  createTeacher,
+  deleteTeacher,
+  getTeachers,
+  updateTeacher,
+} from "../services/adminService";
+import toast from "react-hot-toast";
 
-const StudentPage = () => {
+const TeacherPage = () => {
   const [teachers, setTeachers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formValue, setFormValue] = useState({
@@ -11,10 +17,9 @@ const StudentPage = () => {
     dob: "",
     contactDetails: "",
     salary: false,
-    assignedClass: "",
   });
   const [isEditing, setIsEditing] = useState(false);
-  const [currentStudentId, setCurrentStudentId] = useState(null);
+  const [currentTeacherId, setCurrentTeacherId] = useState(null);
 
   useEffect(() => {
     fetchTeachers();
@@ -22,7 +27,7 @@ const StudentPage = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await api.get("/classes");
+      const response = await getTeachers();
       setTeachers(response.data);
     } catch (error) {
       console.error("Error fetching classes", error);
@@ -32,30 +37,43 @@ const StudentPage = () => {
   const handleSubmit = async () => {
     try {
       if (isEditing) {
-        await api.put(`/students/${currentStudentId}`, formValue);
+        const response = await updateTeacher(currentTeacherId, formValue);
+        if (!response.data.error) {
+          setTeachers((prevData) => {
+            const updatedData = prevData.map((data) => {
+              if (data._id === currentTeacherId) {
+                data = response.data;
+              }
+              return data;
+            });
+            return updatedData;
+          });
+        }
       } else {
-        await api.post("/student", formValue);
+        const response = await createTeacher(formValue);
+        if (!response.data.error) {
+          setTeachers((prevData) => [...prevData, response.data]);
+        }
       }
-      fetchTeachers();
       setShowModal(false);
     } catch (error) {
       console.error("Error saving class", error);
     }
   };
 
-  const handleEdit = (classData) => {
-    setFormValue(classData);
+  const handleEdit = (teacher) => {
+    setFormValue(teacher);
     setIsEditing(true);
-    setCurrentStudentId(classData.id);
+    setCurrentTeacherId(teacher._id);
     setShowModal(true);
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await api.delete(`/classes/${id}`);
-      fetchTeachers();
-    } catch (error) {
-      console.error("Error deleting class", error);
+  const handleDelete = async (teacher) => {
+    const response = await deleteTeacher(teacher._id);
+    if (response.data.isSuccess) {
+      setTeachers((curr) => curr.filter((t) => t._id !== teacher._id));
+    } else {
+      toast.error(response.data.error || "Unable to delete teacher");
     }
   };
 
@@ -149,10 +167,6 @@ const StudentPage = () => {
               <Form.ControlLabel>Salary</Form.ControlLabel>
               <Form.Control name="salary" />
             </Form.Group>
-            <Form.Group>
-              <Form.ControlLabel>Assigned Class</Form.ControlLabel>
-              <Form.Control name="assignedClass" />
-            </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -168,4 +182,4 @@ const StudentPage = () => {
   );
 };
 
-export default StudentPage;
+export default TeacherPage;
