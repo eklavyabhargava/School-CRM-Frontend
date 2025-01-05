@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Table, Panel } from "rsuite";
-import api from "../services/api";
+import { Table, Panel, Loader } from "rsuite";
+import { getStudentProfile } from "../services/studentService";
+import { getTeacherProfile } from "../services/teacherService";
 
 const ProfilePage = () => {
   const { user } = useSelector((state) => state.user);
@@ -16,11 +17,12 @@ const ProfilePage = () => {
 
   const fetchProfileDetails = async () => {
     try {
-      const endpoint =
-        user.role === "student"
-          ? `/students/${user.id}`
-          : `/teachers/${user.id}`;
-      const response = await api.get(endpoint);
+      let response;
+      if (user.salary) {
+        response = await getTeacherProfile(user._id);
+      } else {
+        response = await getStudentProfile(user._id);
+      }
       setDetails(response.data);
     } catch (error) {
       console.error("Error fetching profile details", error);
@@ -28,8 +30,14 @@ const ProfilePage = () => {
   };
 
   if (!details) {
-    return <div className="text-center py-10">Loading...</div>;
+    return (
+      <div className="w-full h-full my-auto mx-auto flex justify-center items-center">
+        <Loader size="md" />
+      </div>
+    );
   }
+
+  const isTeacher = "salary" in details;
 
   return (
     <div className="container mx-auto py-10">
@@ -47,21 +55,24 @@ const ProfilePage = () => {
           {new Date(details.dob).toLocaleDateString()}
         </p>
         <p>
-          <strong>Contact:</strong> {details.contactDetails}
+          <strong>Phone Number:</strong> {details.phoneNumber}
         </p>
-        {user.role === "teacher" && (
+        <p>
+          <strong>Email ID:</strong> {details.email}
+        </p>
+        {isTeacher && (
           <p>
             <strong>Salary:</strong> ${details.salary}
           </p>
         )}
-        {user.role === "student" && (
+        {!isTeacher && (
           <p>
             <strong>Fees Paid:</strong> {details.feesPaid ? "Yes" : "No"}
           </p>
         )}
       </Panel>
 
-      {user.role === "student" && details.class && (
+      {!isTeacher && details.class && (
         <Panel bordered header="Classroom Details" className="mb-5">
           <p>
             <strong>Class Name:</strong> {details.class.name}
@@ -75,7 +86,7 @@ const ProfilePage = () => {
         </Panel>
       )}
 
-      {user.role === "teacher" && details.assignedClass && (
+      {isTeacher && details.assignedClass && (
         <Panel bordered header="Classroom Details" className="mb-5">
           <p>
             <strong>Class Name:</strong> {details.assignedClass.name}
@@ -86,7 +97,7 @@ const ProfilePage = () => {
         </Panel>
       )}
 
-      {user.role === "teacher" && details.students && (
+      {isTeacher && details.students && (
         <div>
           <h3 className="text-xl font-bold mb-3">Students in Assigned Class</h3>
           <Table data={details.students} autoHeight>

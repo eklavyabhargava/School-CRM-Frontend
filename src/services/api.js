@@ -21,7 +21,7 @@ api.interceptors.response.use(
           if (!window.location.pathname.includes("/login")) {
             const basePath = window.location.pathname.includes("/admin")
               ? "admin"
-              : window.location.includes("teacher")
+              : window.location.pathname.includes("teacher")
               ? "teacher"
               : "student";
             window.location.href = `/${basePath}/login`;

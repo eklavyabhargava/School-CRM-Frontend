@@ -9,10 +9,14 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   const authenticateUser = async () => {
     const basePath = window.location.pathname.includes("/admin")
       ? "admin"
-      : window.location.includes("teacher")
+      : window.location.pathname.includes("teacher")
       ? "teacher"
       : "student";
     if (!user) {

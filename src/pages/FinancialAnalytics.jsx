@@ -54,6 +54,7 @@ const FinancialAnalyticsPage = () => {
           <DatePicker
             onChange={(value) => setSelectedDate(value)}
             format="YYYY-MM"
+            value={selectedDate}
             placeholder="Select Month"
             style={{ marginLeft: "10px" }}
           />
